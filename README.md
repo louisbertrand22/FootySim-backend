@@ -104,6 +104,9 @@ Accéder à l’API :
 
 ---
 
+## Update 
+- pip install --no-cache-dir footysim-core==0.1.18
+
 ## 🧪 Tests
 
 Lancer les tests unitaires :
