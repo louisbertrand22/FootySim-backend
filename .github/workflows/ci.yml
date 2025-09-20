@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: footysim_test
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmysqlclient-dev
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Outils qualité
+          pip install ruff mypy pytest pytest-cov
+          # Drivers DB
+          pip install aiomysql cryptography
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -proot --silent; then
+              echo "MySQL is up"; break
+            fi
+            echo "waiting MySQL..."; sleep 2
+          done
+
+      - name: Prepare test database
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS footysim_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+      - name: Set .env for tests
+        run: |
+          echo "DATABASE_URL=mysql+aiomysql://root:root@127.0.0.1:3306/footysim_test" > .env
+          cat .env
+
+      # - name: Init schema + optional seed
+      #   env:
+      #     DATABASE_URL: mysql+aiomysql://root:root@127.0.0.1:3306/footysim_test
+      #   run: |
+      #     # utilise ton script init (celui qu’on a écrit)
+      #     python tun_py.py || true
+      #     # si tu veux forcer un reset complet, adapte le script pour accepter --reset
+      #     # python tun_py.py --reset
+
+      # - name: Ruff (lint)
+      #   run: ruff check src
+
+      # - name: Mypy (type check)
+      #   run: mypy src || true  # mets en dur "|| true" tant que l’annotation n’est pas finie
+
+      # - name: Pytest
+      #   env:
+      #     DATABASE_URL: mysql+aiomysql://root:root@127.0.0.1:3306/footysim_test
+      #   run: |
+      #     pytest -q --maxfail=1 --disable-warnings --cov=src --cov-report=xml --cov-report=term
+
+      # - name: Upload coverage
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: coverage-xml
+      #     path: coverage.xml
