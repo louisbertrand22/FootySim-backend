@@ -16,7 +16,7 @@ services:
       retries: 10
 
   api:
-    image: ghcr.io/<OWNER>/<REPO>:latest   # ← remplace par ton org/repo
+    image: ghcr.io/louisbertrand22/FootySim-backend:latest   # ← remplace par ton org/repo
     environment:
       # injecte l’URL DB au runtime (rien dans l’image)
       DATABASE_URL: mysql+aiomysql://root:root@db:3306/footysim

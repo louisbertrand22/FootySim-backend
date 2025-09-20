@@ -1,4 +1,4 @@
-![CI](https://github.com/<ton-org>/<ton-repo>/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/louisbertrand22/FootySim-backend/actions/workflows/ci.yml/badge.svg)
 
 
 # 📖 FootySim Backend
