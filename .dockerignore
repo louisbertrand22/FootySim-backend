@@ -1,0 +1,16 @@
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+.env
+*.db
+alembic/versions/__pycache__/
+.vscode/
+.idea/
+*.egg-info/
+build/
+dist/
+.git/
+.github/

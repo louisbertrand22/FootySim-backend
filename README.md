@@ -1,3 +1,6 @@
+![CI](https://github.com/louisbertrand22/FootySim-backend/actions/workflows/ci.yml/badge.svg)
+
+
 # 📖 FootySim Backend
 
 ## ⚽ Description
