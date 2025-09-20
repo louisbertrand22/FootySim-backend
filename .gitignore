@@ -1,0 +1,28 @@
+# Environnements virtuels
+venv/
+.venv/
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Config & secrets
+.env
+*.db
+
+# Logs
+*.log
+
+# Alembic
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# IDE
+.vscode/
+.idea/
+
+# Distribution / Build
+*.egg-info/
+build/
+dist/
