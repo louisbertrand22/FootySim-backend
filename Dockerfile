@@ -18,7 +18,6 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copier le code
 COPY src ./src
-COPY .env.example ./.env.example  # optionnel, juste pour doc
 # si tu as des fichiers nécessaires (alembic.ini etc.), copie-les ici
 
 # Expose & cmd

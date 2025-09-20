@@ -1,0 +1,28 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: footysim
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    image: ghcr.io/<OWNER>/<REPO>:latest   # ← remplace par ton org/repo
+    environment:
+      # injecte l’URL DB au runtime (rien dans l’image)
+      DATABASE_URL: mysql+aiomysql://root:root@db:3306/footysim
+      PYTHONPATH: src
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy

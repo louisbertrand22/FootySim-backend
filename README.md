@@ -1,3 +1,6 @@
+![CI](https://github.com/<ton-org>/<ton-repo>/actions/workflows/ci.yml/badge.svg)
+
+
 # 📖 FootySim Backend
 
 ## ⚽ Description
