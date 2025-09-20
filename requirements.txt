@@ -5,3 +5,7 @@ alembic>=1.13
 pydantic>=2.0
 python-dotenv>=1.0
 footysim-core>=0.1.8
+pydantic-settings
+aiomysql
+
+asyncpg>=0.27
